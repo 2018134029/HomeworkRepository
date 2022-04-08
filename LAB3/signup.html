@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>signup</title>
+    <link rel="stylesheet" href="main.css" type="text/css">
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>welcome to our Shop</h1>
+      </div>
+    </header>
+    <nav>
+      <a href="index.html">메인 페이지</a>
+      <a href="login.html">로그인</a>&nbsp;<a href="signup.html">회원가입</a>
+    </nav>
+
+    <form action="index.html" method="post" class="centeredform">
+      <p>이름: <input type="text" name="name" autofocus></p>
+      <p>생일: <input type="date" name="date" required> </p>
+      <p>전화번호: <input type="tel" name="tel" pattern="\d{3}-\d{4}-\d{4}"></p>
+      <p>나이: <input type="number" name="age" step="1"></p>
+      <p>email: <input type="email" name="email" placeholder="example@example.com"></p>
+      <p>password: <input type="password" name="password"></p>
+      <p><input type="submit" name="submit" value="완료"></p>
+    </form>
+  </body>
+</html>
