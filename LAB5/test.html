@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+  </head>
+  <body>
+    <div id="1">
+
+    </div>
+    <script type="text/javascript">
+      fetch("product.json")
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        document.getElementById("1").innerHTML = "<img src=" + data[0].url + " alt='book' id='spin'>";
+      })
+      .catch(function(err){
+        console.log('Fetch problem:' + err.message);
+      });
+    </script>
+  </body>
+</html>
