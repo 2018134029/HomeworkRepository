@@ -1,0 +1,136 @@
+* {
+  box-sizing: border-box;
+}
+html {
+  display: flex;
+  justify-content: center;
+}
+body {
+  width: 1000px;
+}
+header h1 {
+  font-size: 50px;
+}
+header div{
+  position: relative;
+  animation-name: movingtext;
+  animation-duration: 2s
+}
+@keyframes movingtext {
+  0% {left: 60%}
+  100%{left: 0%}
+
+}
+.main form {
+  background-color: skyblue;
+  width: 450px;
+  padding: 10px;
+  border: 1px solid blue;
+  border-radius: 20px;
+  font-size: 20px;
+  font-family: arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+}
+nav{
+  border-top: 10px dashed skyblue;
+  margin-top: 20px;
+  color: blue;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+nav > div {
+  margin: 10px;
+}
+div.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.main .intro {
+  display: flex;
+  flex-direction: column;
+}
+.main .intro .string {
+  column-count: 3;
+}
+
+.main .items {
+  background-color: skyblue;
+  border-radius: 20px;
+  border: 1px solid blue;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 400px;
+}
+.main .items div {
+  justify-content: space-around;
+  align-items:center;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid gray;
+  height: 400px;
+  flex: 50%;
+  max-width: 50%;
+}
+.main .items .price {
+  background-color: yellow;
+  position: absolute;
+  margin-top: 150px;
+  border-radius: 20px;
+  font-size: 200%;
+  color: gray;
+  height: 40px;
+  width: 180px;
+}
+.main .items .explaination {
+  position: absolute;
+  margin-top: -300px;
+  border: 0px;
+  font-size: 120%;
+  color: gray;
+}
+@media (max-width: 800px) {
+  .main .items div {
+    flex: 50%;
+    max-width: 50%;
+  }
+  .main .intro .string {
+    column-count: 2;
+  }
+}
+@media (max-width: 480px) {
+  .main .items div {
+    flex: 100%;
+    max-width: 100%;
+  }
+  .main .intro .string {
+    column-count: 1;
+  }
+}
+.main .items div img {
+  width: 100px;
+  height: 100px;
+}
+#spin {
+  transition: transform 2s;
+}
+#spin:hover{
+  transform: rotate(360deg);
+}
+#big {
+  transition: transform 2s;
+}
+#big:hover {
+  transform: scale(2, 2);
+}
