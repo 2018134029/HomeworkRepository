@@ -4,6 +4,7 @@
 html {
   display: flex;
   justify-content: center;
+
 }
 body {
   width: 1000px;
@@ -84,18 +85,16 @@ div.main {
   max-width: 50%;
 }
 .main .items .price {
-  background-color: yellow;
-  position: absolute;
-  margin-top: 150px;
-  border-radius: 20px;
+  position: relative;
+  margin-top: 0px;
+  border: 0px;
   font-size: 200%;
   color: gray;
-  height: 40px;
-  width: 180px;
+
 }
 .main .items .explaination {
-  position: absolute;
-  margin-top: -300px;
+  position: relative;
+  margin-top: 0px;
   border: 0px;
   font-size: 120%;
   color: gray;

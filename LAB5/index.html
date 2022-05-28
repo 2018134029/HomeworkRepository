@@ -19,7 +19,7 @@
       <div><a href="login.html">로그인</a></div>
       <div><a href="signup.html">회원가입</a></div>
       <div>
-        <input type="text" class="searcher" placeholder="key word?" value="">
+        <input type="text" class="searcher" placeholder="key word??" value="">
         <select class="selector">
           <option value="all">all</option>
           <option value="java">java</option>
@@ -37,20 +37,27 @@
       </div>
     </div>
     <script type="text/javascript">
-      let count = 1;
+      let count = 0;
+      let usedId = [];
+      Event.cancelBubble = true;
       document.addEventListener('DOMContentLoaded', load);
       window.onscroll = () => {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight
-          || window.scrollY == 0) {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight ) {
           count = count + 1;
           load();
         }
       };
       document.addEventListener('DOMContentLoaded', () => {
-        document.querySelector('.searchButton').onclick = function() {
+        document.querySelector('.searchButton').onmouseup = function() {
+          usedId = [];
           document.querySelector('.main .items').innerHTML = "";
           count = 0;
           load();
+          if (document.querySelectorAll('.main .items img').length < 3 ){
+            console.log(usedId);
+            count = count + 1;
+            load();
+          }
         };
       });
 
@@ -59,11 +66,12 @@
         .then(response => response.json())
         .then(function(datas) {
           filtered = datas.filter(only_searched)
-          if (count <= filtered[0].postId){
+          if (count < filtered[0].postId){
             count = filtered[0].postId;
           }
           return filtered;
         })
+
         .then(datas => datas.forEach(add_post))
         .catch(function(err){
           console.log('Fetch problem: ' + err.message);
@@ -74,6 +82,10 @@
         if (data.postId != count ) {
           return;
         }else {
+          if (usedId.includes(data.id)) {
+            return;
+          }
+          usedId.push(data.id);
           let post = document.createElement('div');
           post.setAttribute("id", data.id);
           post.innerHTML = "<img src=" + data.url + " alt=" + data.price +">"
@@ -81,12 +93,15 @@
           post.setAttribute("onclick", `clicking(${post.id})`);
         }
       }
-      async function clicking(id) {
-        let clicked = document.getElementById(id);
-        let imageURL = clicked.firstChild.src;
-        let imagePrice = clicked.firstChild.alt;
 
-        await fetch(`product.json`)
+      function clicking(id) {
+        let clicked = document.getElementById(id);
+        if(clicked.firstChild.classList.contains('explaination')) {
+          clicked.removeChild(clicked.firstChild);
+          clicked.removeChild(clicked.lastChild);
+          return;
+        }
+        fetch(`product.json`)
         .then(response => response.json())
         .then(function(datas) {
           for (data of datas) {
@@ -96,13 +111,20 @@
           }
         })
         .then(function(data){
-          clicked.innerHTML = `<img src=${data.url} alt=${data.price}>` +
-          `<div class="explaination">${data.explaination}</div>` +
-          `<div class="price">${data.price}</div>`;
+          const image = clicked.firstChild;
+          let explaination = document.createElement('div');
+          explaination.classList.add('explaination');
+          let price = document.createElement('div');
+          price.classList.add('price');
+          explaination.innerText = data.explaination;
+          price.innerText = data.price;
+
+          clicked.insertBefore(explaination, image);
+          clicked.append(image);
+          clicked.append(price);
         });
-
-
       }
+
       function only_searched(data) {
         selectValue = document.querySelector('.selector').value;
         searchValue = document.querySelector('.searcher').value;
