@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>E-commerce main page</title>
+    <link rel="stylesheet" href="main.css" type="text/css">
+    <script type="text/javascript">
+
+    </script>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>welcome to our Shop</h1>
+      </div>
+    </header>
+    <nav>
+      <div><a href="index.html">메인 페이지</a></div>
+      <div><a href="login.html">로그인</a></div>
+      <div><a href="signup.html">회원가입</a></div>
+      <div>
+        <input type="text" class="searcher" placeholder="key word??" value="">
+        <select class="selector">
+          <option value="all">all</option>
+          <option value="java">java</option>
+          <option value="python">python</option>
+          <option value="html">html</option>
+        </select>
+        <button type="button" class="searchButton">search result</button>
+      </div>
+    </nav>
+    <div class="main">
+      <div>
+        <h1>choose things</h1>
+      </div>
+      <div class="items">
+      </div>
+    </div>
+    <script type="text/javascript">
+      let count = 0;
+      let usedId = [];
+      Event.cancelBubble = true;
+      document.addEventListener('DOMContentLoaded', load);
+      window.onscroll = () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight ) {
+          count = count + 1;
+          load();
+        }
+      };
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('.searchButton').onmouseup = function() {
+          usedId = [];
+          document.querySelector('.main .items').innerHTML = "";
+          count = 0;
+          load();
+          if (document.querySelectorAll('.main .items img').length < 3 ){
+            console.log(usedId);
+            count = count + 1;
+            load();
+          }
+        };
+      });
+
+      async function load() {
+        await fetch(`product.json`)
+        .then(response => response.json())
+        .then(function(datas) {
+          filtered = datas.filter(only_searched)
+          if (count < filtered[0].postId){
+            count = filtered[0].postId;
+          }
+          return filtered;
+        })
+
+        .then(datas => datas.forEach(add_post))
+        .catch(function(err){
+          console.log('Fetch problem: ' + err.message);
+        });
+      }
+
+      function add_post(data) {
+        if (data.postId != count ) {
+          return;
+        }else {
+          if (usedId.includes(data.id)) {
+            return;
+          }
+          usedId.push(data.id);
+          let post = document.createElement('div');
+          post.setAttribute("id", data.id);
+          post.innerHTML = "<img src=" + data.url + " alt=" + data.price +">"
+          document.querySelector('.main .items').append(post);
+          post.setAttribute("onclick", `clicking(${post.id})`);
+        }
+      }
+
+      function clicking(id) {
+        let clicked = document.getElementById(id);
+        if(clicked.firstChild.classList.contains('explaination')) {
+          clicked.removeChild(clicked.firstChild);
+          clicked.removeChild(clicked.lastChild);
+          return;
+        }
+        fetch(`product.json`)
+        .then(response => response.json())
+        .then(function(datas) {
+          for (data of datas) {
+            if (data.id == id){
+              return data;
+            }
+          }
+        })
+        .then(function(data){
+          const image = clicked.firstChild;
+          let explaination = document.createElement('div');
+          explaination.classList.add('explaination');
+          let price = document.createElement('div');
+          price.classList.add('price');
+          explaination.innerText = data.explaination;
+          price.innerText = data.price;
+
+          clicked.insertBefore(explaination, image);
+          clicked.append(image);
+          clicked.append(price);
+        });
+      }
+
+      function only_searched(data) {
+        selectValue = document.querySelector('.selector').value;
+        searchValue = document.querySelector('.searcher').value;
+        if (selectValue == 'all') {
+          selectValue = '';
+        }
+        return data.name.toLowerCase().search(`${selectValue}`.toLowerCase()) >= 0
+        && data.name.toLowerCase().search(`${searchValue}`.toLowerCase()) >= 0;
+      }
+
+    </script>
+  </body>
+</html>
